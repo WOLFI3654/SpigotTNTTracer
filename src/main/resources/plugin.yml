@@ -5,3 +5,7 @@ description: Tracks tnt explosions
 main: de.wolfi.tnttracer.Main
 commands:
   track:
+  hide:
+    description: not enabled
+  show:
+    description: not enabled
