@@ -22,6 +22,7 @@ import org.bukkit.scheduler.BukkitTask;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
+import java.util.logging.Level;
 
 /**
  * Created by root on 29.06.2017.
@@ -40,19 +41,22 @@ private final HashMap<UUID,Tnt> explosions;
         }},1,1);
     }
 
-    /*    @EventHandler(priority = EventPriority.MONITOR)
-        public void onPrime(Worlde e){
-            if(e.getBlock().getType() == Material.TNT && e.getChangedType() == Material.AIR){
-                System.out.println("Dingsen found");
-                this.explosions.put(e.getEntity().getUniqueId(),new Tnt((TNTPrimed) e.getEntity()));
-            }
-        }*/
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onSpawn(EntitySpawnEvent e){
+        if(e.getEntityType() == EntityType.PRIMED_TNT){
+            if(!explosions.containsKey(e.getEntity().getUniqueId()))explosions.put(e.getEntity().getUniqueId(), new Tnt((TNTPrimed) e.getEntity()));
+        }
+    }
     @EventHandler(priority = EventPriority.MONITOR)
     public void onExplode(EntityExplodeEvent e){
         if(e.getEntityType() == EntityType.PRIMED_TNT){
-
-
+            if(!explosions.containsKey(e.getEntity().getUniqueId())){
+                Bukkit.getLogger().log(Level.WARNING,"Please contact plugin author. TNT was not registered");
+                return;
+            }
             explosions.get(e.getEntity().getUniqueId()).stop();
+
         }
     }
 
